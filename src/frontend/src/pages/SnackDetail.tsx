@@ -16,7 +16,7 @@ export const SnackDetail: React.FC = () => {
   const [snack, setSnack] = useState<Snack | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
-  const [reviewsLoading, setReviewsLoading] = useState(false);
+  const [reviewsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showAddReview, setShowAddReview] = useState(false);
 
