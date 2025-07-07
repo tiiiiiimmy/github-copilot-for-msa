@@ -1,51 +1,50 @@
 ---
-title: SnackSpot Auckland - AI-Ready Technical Specification
+title: Design Specification for SnackSpot Auckland Application
 version: 1.0
-date_created: 2025-07-05
-last_updated: 2025-07-05
+date_created: 2025-07-08
+last_updated: 2025-07-08
 owner: SnackSpot Auckland Team
-tags: [infrastructure, design, app, pwa, gamification, community]
+tags: [design, app, pwa, fullstack, accessibility, ai-ready]
 ---
 
 # Introduction
 
-SnackSpot Auckland is a gamified mobile web application (PWA) for discovering, sharing, and celebrating snacks in Auckland, New Zealand. This specification defines the requirements, constraints, interfaces, and acceptance criteria for the solution, structured for effective use by Generative AIs and engineering teams.
+This specification defines the requirements, constraints, and interfaces for the SnackSpot Auckland application—a gamified, community-driven PWA for discovering, sharing, and celebrating snacks in Auckland, New Zealand. The document is structured for effective use by Generative AIs and engineering teams.
 
 ## 1. Purpose & Scope
 
-This specification provides a comprehensive, unambiguous reference for the design, development, and validation of the SnackSpot Auckland platform. It is intended for developers, testers, architects, and stakeholders involved in the project. Assumptions: Users have access to modern smartphones and internet connectivity in Auckland.
+The purpose of this specification is to provide a clear, unambiguous reference for the design, development, and validation of the SnackSpot Auckland platform. It covers both frontend and backend, targeting developers, testers, architects, and stakeholders. Assumptions: Users have modern smartphones and internet access in Auckland.
 
 ## 2. Definitions
 
 - **PWA**: Progressive Web Application
-- **MVP**: Minimum Viable Product
+- **CRUD**: Create, Read, Update, Delete
 - **JWT**: JSON Web Token
-- **CDN**: Content Delivery Network
-- **API**: Application Programming Interface
-- **PostGIS**: PostgreSQL extension for geospatial data
+- **EF Core**: Entity Framework Core
+- **WCAG**: Web Content Accessibility Guidelines
 - **CI/CD**: Continuous Integration / Continuous Deployment
-- **MAU**: Monthly Active Users
-- **Badge**: Visual achievement awarded for user actions
-- **Pin**: Map marker representing a snack location
-- **Leveling**: User progression system unlocking new features/areas
-- **RedNote-style**: Conversational comment flow inspired by RedNote
+- **API**: Application Programming Interface
+- **a11y**: Accessibility
+- **Lighthouse**: Google tool for web performance and accessibility
+- **SQL/NoSQL**: Structured/Unstructured database paradigms
 
 ## 3. Requirements, Constraints & Guidelines
 
-- **REQ-001**: The app shall provide an interactive map with custom snack pins and clustering.
-- **REQ-002**: Users shall be able to search snacks by location, category, and tags.
-- **REQ-003**: The system shall implement a gamified leveling and badge system.
-- **REQ-004**: Users shall be able to share snacks via social media cards.
-- **REQ-005**: The app shall support user-generated content and moderation.
-- **REQ-006**: The backend shall use C# with .NET 8 or higher, Entity Framework Core, and an SQL or NoSQL database. Use SQL for core entities; NoSQL may be used for non-relational, high-volume, or unstructured data with explicit justification.
-- **REQ-007**: The backend shall implement CRUD (Create, Read, Update, Delete) operations for at least one entity. Specify which entities support which operations (e.g., users: create, read, update self, soft-delete; snacks: full CRUD for owners/admins; reviews: create, read, update self, delete self/admin, or mark as hidden).
-- **REQ-008**: The frontend shall use React with TypeScript (JavaScript allowed with justification) and a styling library (e.g., MUI, Mantine, Tailwind) or custom styling with a focus on a visually appealing, responsive UI. Frontend must achieve Lighthouse scores ≥ 90 for performance and accessibility, and meet WCAG 2.1 AA.
-- **REQ-009**: The frontend shall implement navigation using React Router or a similar routing library.
-- **REQ-010**: Both frontend and backend must be deployed to a public endpoint with minimum 99% uptime, basic monitoring (health checks, error alerts), and documented rollback strategy.
-- **REQ-011**: Both frontend and backend must use Git with a regular, meaningful commit history. Use a commit message convention and pre-commit hooks to ensure quality.
-- **REQ-012**: All public API endpoints must be versioned (e.g., /api/v1/).
-- **REQ-013**: Frontend must support mobile, tablet, and desktop breakpoints unless explicitly approved. If not responsive, the README must justify why.
-- **REQ-014**: Frontend must meet WCAG 2.1 AA accessibility standards, including semantic HTML, keyboard navigation, ARIA, color contrast, alt text, and focus management.
+- **REQ-001**: The frontend shall use React with TypeScript (JavaScript allowed with justification) and a styling library (e.g., MUI, Mantine, Tailwind) or custom styling, focusing on a visually appealing, responsive UI.
+- **REQ-002**: The frontend must implement navigation using React Router or a similar routing library.
+- **REQ-003**: The frontend must achieve Lighthouse scores ≥ 90 for performance and accessibility, and meet WCAG 2.1 AA.
+- **REQ-004**: The frontend must support mobile, tablet, and desktop breakpoints unless explicitly approved. If not responsive, the README must justify why.
+- **REQ-005**: The frontend must meet a11y requirements: semantic HTML, keyboard navigation, ARIA, color contrast, alt text, focus management, skip links, and accessible forms.
+- **REQ-006**: The backend shall use C# with .NET 8+, Entity Framework Core, and an SQL or NoSQL database. Use SQL for core entities; NoSQL only with explicit justification.
+- **REQ-007**: The backend must implement CRUD operations for at least one entity. Specify which entities support which operations (e.g., users: create, read, update self, soft-delete; snacks: full CRUD for owners/admins; reviews: create, read, update self, delete self/admin, or mark as hidden).
+- **REQ-008**: Both frontend and backend must be deployed to a public endpoint with minimum 99% uptime, basic monitoring (health checks, error alerts), and documented rollback strategy.
+- **REQ-009**: Both frontend and backend must use Git with a regular, meaningful commit history. Use a commit message convention and pre-commit hooks to ensure quality.
+- **REQ-010**: All public API endpoints must be versioned (e.g., /api/v1/).
+- **REQ-011**: The system shall provide an interactive map with custom snack pins and clustering.
+- **REQ-012**: Users shall be able to search snacks by location, category, and tags.
+- **REQ-013**: The system shall implement a gamified leveling and badge system.
+- **REQ-014**: Users shall be able to share snacks via social media cards.
+- **REQ-015**: The app shall support user-generated content and moderation.
 - **SEC-001**: All authentication must use secure JWT tokens with refresh. Refresh tokens must be stored securely (httpOnly cookies) and rotated on use.
 - **SEC-002**: Input validation and sanitization must be enforced on all endpoints. All critical validation and business logic must be enforced on the backend, regardless of frontend checks.
 - **SEC-003**: Uploaded images must be virus-scanned and stored securely.
@@ -68,11 +67,11 @@ This specification provides a comprehensive, unambiguous reference for the desig
 
 ### API Endpoints (examples)
 
-- `GET /api/snacks?lat={lat}&lng={lng}&radius={r}`: Returns snacks within radius.
-- `POST /api/snacks`: Add new snack (auth required).
-- `GET /api/categories`: List all categories.
-- `POST /api/ratings`: Submit rating and review.
-- `GET /api/users/{id}`: Get user profile and badges.
+- `GET /api/v1/snacks?lat={lat}&lng={lng}&radius={r}`: Returns snacks within radius.
+- `POST /api/v1/snacks`: Add new snack (auth required).
+- `GET /api/v1/categories`: List all categories.
+- `POST /api/v1/ratings`: Submit rating and review.
+- `GET /api/v1/users/{id}`: Get user profile and badges.
 
 ### Database Schema (excerpt)
 
@@ -128,6 +127,8 @@ data_source ENUM('user','scraped','seeded')
 - **AC-004**: When a user shares a snack, a branded card is generated and shareable to Instagram.
 - **AC-005**: When inappropriate content is reported, it is hidden from public view within 1 hour.
 - **AC-006**: All API endpoints must reject invalid or malicious input.
+- **AC-007**: Given a user with a screen reader, all navigation and forms are fully accessible.
+- **AC-008**: Given a malformed request or invalid JWT, the API returns a clear error (400/401/403).
 
 ## 6. Test Automation Strategy
 
@@ -144,39 +145,34 @@ data_source ENUM('user','scraped','seeded')
 - Map-based discovery leverages geospatial data for local relevance.
 - Progressive unlocking and badges incentivize continued use.
 - PWA ensures accessibility and installability without app stores.
-- Security and moderation are prioritized to protect users and content.
+- Security, privacy, and moderation are prioritized to protect users and content.
+- Accessibility and inclusivity are core to the user experience.
 
 ## 8. Dependencies & External Integrations
 
 ### External Systems
-
 - **EXT-001**: Google Maps Platform – Map rendering and geolocation
 - **EXT-002**: AWS S3 – Image storage
 - **EXT-003**: Cloudinary – Image optimization and CDN
 - **EXT-004**: Firebase Cloud Messaging – Push notifications
 
 ### Third-Party Services
-
 - **SVC-001**: Google Analytics 4 – Analytics and usage tracking
 - **SVC-002**: Sentry – Error tracking
 
 ### Infrastructure Dependencies
-
 - **INF-001**: PostgreSQL with PostGIS – Geospatial data storage
 - **INF-002**: Redis – Caching for performance
 - **INF-003**: Load balancer – Horizontal scaling
 
 ### Data Dependencies
-
 - **DAT-001**: NZ supermarket websites – Snack data scraping
 
 ### Technology Platform Dependencies
-
 - **PLT-001**: Node.js 18+ (for frontend tooling), React 18+, Tailwind CSS, Vite
 - **PLT-002**: .NET 8+, Entity Framework Core, SQL/NoSQL database
 
 ### Compliance Dependencies
-
 - **COM-001**: GDPR/Privacy Act compliance for user data
 
 ## 9. Examples & Edge Cases
@@ -204,7 +200,7 @@ data_source ENUM('user','scraped','seeded')
 - All requirements and acceptance criteria are covered by automated tests.
 - Security tests validate JWT, input sanitization, and rate limiting.
 - Performance tests confirm map and image load times.
-- Manual review confirms onboarding, leveling, and sharing flows.
+- Manual review confirms onboarding, leveling, sharing flows, and accessibility (a11y).
 - Compliance checks for privacy and data handling.
 
 ## 11. Related Specifications / Further Reading
@@ -214,4 +210,5 @@ data_source ENUM('user','scraped','seeded')
 - [.NET 8 Documentation](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8)
 - [Entity Framework Core Docs](https://learn.microsoft.com/en-us/ef/core/)
 - [Tailwind CSS Docs](https://tailwindcss.com/docs/installation)
+- [WCAG 2.1 Guidelines](https://www.w3.org/WAI/WCAG21/quickref/)
 - [GitHub Actions Docs](https://docs.github.com/en/actions)
