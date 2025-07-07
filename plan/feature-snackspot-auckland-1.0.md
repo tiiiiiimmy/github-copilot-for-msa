@@ -47,8 +47,8 @@ This implementation plan provides a step-by-step, machine-readable roadmap for b
 
 | Task     | Description                                                                                   | Completed | Date |
 | -------- | --------------------------------------------------------------------------------------------- | --------- | ---- |
-| TASK-001 | Initialize Git repository with .gitignore, README.md, and commit conventions.                 |           |      |
-| TASK-002 | Set up monorepo or separate repos for frontend and backend in /src/frontend and /src/backend. |           |      |
+| TASK-001 | Initialize Git repository with .gitignore, README.md, and commit conventions.                 | ✅        | 2025-07-08 |
+| TASK-002 | Set up monorepo or separate repos for frontend and backend in /src/frontend and /src/backend. | ✅        | 2025-07-08 |
 | TASK-003 | Configure GitHub Actions for CI/CD for both frontend and backend.                             |           |      |
 | TASK-004 | Add pre-commit hooks for linting and commit message checks.                                   |           |      |
 | TASK-005 | Add automated dependency vulnerability scanning (Dependabot, dotnet audit, npm audit) in CI.  |           |      |
@@ -59,11 +59,11 @@ This implementation plan provides a step-by-step, machine-readable roadmap for b
 
 | Task     | Description                                                                                  | Completed | Date |
 | -------- | -------------------------------------------------------------------------------------------- | --------- | ---- |
-| TASK-006 | Scaffold .NET 8+ Web API project in /src/backend.                                            |           |      |
-| TASK-007 | Set up EF Core, configure SQL database (PostgreSQL with PostGIS), and implement migrations.  |           |      |
-| TASK-008 | Define and implement core entities: User, Snack, Review, Category.                           |           |      |
-| TASK-009 | Implement versioned API endpoints (/api/v1/...) for CRUD operations.                         |           |      |
-| TASK-010 | Implement JWT authentication with refresh token logic and secure storage (httpOnly cookies). |           |      |
+| TASK-006 | Scaffold .NET 8+ Web API project in /src/backend.                                            | ✅        | 2025-07-08 |
+| TASK-007 | Set up EF Core, configure SQL database (PostgreSQL with PostGIS), and implement migrations.  | ✅        | 2025-07-08 |
+| TASK-008 | Define and implement core entities: User, Snack, Review, Category.                           | ✅        | 2025-07-08 |
+| TASK-009 | Implement versioned API endpoints (/api/v1/...) for CRUD operations.                         | ✅        | 2025-07-08 |
+| TASK-010 | Implement JWT authentication with refresh token logic and secure storage (httpOnly cookies). | ✅        | 2025-07-08 |
 | TASK-011 | Add input validation, rate limiting, and error handling middleware.                          |           |      |
 | TASK-012 | Write unit and integration tests for API endpoints and business logic.                       |           |      |
 | TASK-013 | Set up monitoring, health checks, logging, and deployment pipeline for backend.              |           |      |
