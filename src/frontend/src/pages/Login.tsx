@@ -21,7 +21,7 @@ export const Login: React.FC = () => {
     setLoading(true);
 
     try {
-      await login(formData.email, formData.password);
+      await login({ email: formData.email, password: formData.password });
       navigate('/');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed');
