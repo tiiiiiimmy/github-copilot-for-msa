@@ -4,7 +4,6 @@ import type { Location, Category } from '../../types/api';
 import apiService from '../../services/api';
 
 interface FilterBarProps {
-  onLocationChange: (location: Location) => void;
   onRadiusChange: (radius: number) => void;
   onCategoryChange: (categoryId: string) => void;
   onViewModeChange: (mode: 'map' | 'list') => void;
@@ -15,7 +14,6 @@ interface FilterBarProps {
 }
 
 export const FilterBar: React.FC<FilterBarProps> = ({
-  onLocationChange,
   onRadiusChange,
   onCategoryChange,
   onViewModeChange,

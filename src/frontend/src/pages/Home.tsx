@@ -8,10 +8,9 @@ import { useLocation } from '../hooks/useLocation';
 import type { Location } from '../types/api';
 
 export const Home: React.FC = () => {
-  const { user } = useAuth();
   const { location, loading: locationLoading, error: locationError, requestLocation } = useLocation();
-  const [selectedLocation, setSelectedLocation] = useState<Location | undefined>(location);
-  const [mapCenter, setMapCenter] = useState<Location | undefined>(location);
+  const [selectedLocation, setSelectedLocation] = useState<Location | undefined>(location || undefined);
+  const [mapCenter, setMapCenter] = useState<Location | undefined>(location || undefined);
   const [searchRadius, setSearchRadius] = useState(1000);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [viewMode, setViewMode] = useState<'map' | 'list'>('map');
