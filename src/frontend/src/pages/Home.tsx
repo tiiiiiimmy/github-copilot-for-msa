@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { MapContainer } from '../components/Map/MapContainer';
 import { SnackList } from '../components/Snacks/SnackList';
 import { FilterBar } from '../components/Filters/FilterBar';
-import { useAuth } from '../context/AuthContext';
 import { useSnacks } from '../hooks/useSnacks';
 import { useLocation } from '../hooks/useLocation';
 import type { Location } from '../types/api';
@@ -79,7 +78,6 @@ export const Home: React.FC = () => {
     <div className="flex flex-col h-screen">
       {/* Filter bar */}
       <FilterBar
-        onLocationChange={handleLocationChange}
         onRadiusChange={handleRadiusChange}
         onCategoryChange={handleCategoryChange}
         onViewModeChange={setViewMode}
