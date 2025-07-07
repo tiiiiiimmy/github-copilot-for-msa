@@ -35,8 +35,8 @@ The purpose of this specification is to provide a clear, unambiguous reference f
 - **REQ-003**: The frontend must achieve Lighthouse scores ≥ 90 for performance and accessibility, and meet WCAG 2.1 AA.
 - **REQ-004**: The frontend must support mobile, tablet, and desktop breakpoints unless explicitly approved. If not responsive, the README must justify why.
 - **REQ-005**: The frontend must meet a11y requirements: semantic HTML, keyboard navigation, ARIA, color contrast, alt text, focus management, skip links, and accessible forms.
-- **REQ-006**: The backend shall use C# with .NET 8+, Entity Framework Core, and an SQL or NoSQL database. Use SQL for core entities; NoSQL only with explicit justification.
-- **REQ-007**: The backend must implement CRUD operations for at least one entity. Specify which entities support which operations (e.g., users: create, read, update self, soft-delete; snacks: full CRUD for owners/admins; reviews: create, read, update self, delete self/admin, or mark as hidden).
+- **REQ-006**: The backend shall use C# with .NET 8+, Entity Framework Core, and an SQL or NoSQL database. Use SQL for core entities; NoSQL only with explicit justification. PostgreSQL with PostGIS is recommended for geospatial data.
+- **REQ-007**: The backend must implement CRUD operations for all core entities (users, snacks, reviews, categories). Specify which entities support which operations (e.g., users: create, read, update self, soft-delete; snacks: full CRUD for owners/admins; reviews: create, read, update self, delete self/admin, or mark as hidden).
 - **REQ-008**: Both frontend and backend must be deployed to a public endpoint with minimum 99% uptime, basic monitoring (health checks, error alerts), and documented rollback strategy.
 - **REQ-009**: Both frontend and backend must use Git with a regular, meaningful commit history. Use a commit message convention and pre-commit hooks to ensure quality.
 - **REQ-010**: All public API endpoints must be versioned (e.g., /api/v1/).
@@ -47,18 +47,21 @@ The purpose of this specification is to provide a clear, unambiguous reference f
 - **REQ-015**: The app shall support user-generated content and moderation.
 - **SEC-001**: All authentication must use secure JWT tokens with refresh. Refresh tokens must be stored securely (httpOnly cookies) and rotated on use.
 - **SEC-002**: Input validation and sanitization must be enforced on all endpoints. All critical validation and business logic must be enforced on the backend, regardless of frontend checks.
-- **SEC-003**: Uploaded images must be virus-scanned and stored securely.
+- **SEC-003**: Uploaded images must be virus-scanned and stored securely (e.g., S3/Cloudinary with AV scanning).
 - **SEC-004**: API endpoints for scraping and public endpoints must be rate-limited and implement abuse prevention.
 - **SEC-005**: All user data handling must comply with GDPR and NZ Privacy Act.
+- **SEC-006**: All endpoints must enforce input validation and sanitization, with business logic enforced on backend.
+- **SEC-007**: Implement abuse prevention and moderation endpoints.
 - **PER-001**: Map load time < 3s on 3G; 100 pins render < 2s.
 - **PER-002**: Image upload < 10s for 5MB files.
 - **REL-001**: The system must support horizontal scaling and load balancing. Rollback procedures must be documented and tested.
 - **OPX-001**: All resources must be tagged for cost/governance. Deployed services must have monitoring and alerting.
-- **GUD-001**: Use Azure Well-Architected Framework pillars in design.
+- **GUD-001**: Use Azure Well-Architected Framework pillars in design (Security, Operational Excellence, Performance Efficiency, Reliability, Cost Optimization).
 - **GUD-002**: Use consistent naming conventions and resource abbreviations.
 - **GUD-003**: Provide onboarding and clear user flows for first-time users.
 - **GUD-004**: Use SQL for core entities; NoSQL only with explicit justification.
 - **GUD-005**: Use a commit message convention and pre-commit hooks to ensure meaningful commit history.
+- **GUD-006**: Provide clear documentation and onboarding flows.
 - **CON-001**: Only users Level 2+ can create new categories.
 - **CON-002**: User following is available at Level 3+.
 - **PAT-001**: Use Instagram-style sharing cards for social features.
@@ -138,6 +141,9 @@ data_source ENUM('user','scraped','seeded')
 - **CI/CD Integration**: Automated tests run on every PR via GitHub Actions
 - **Coverage Requirements**: 90%+ for core logic, 80%+ overall for both frontend and backend
 - **Performance Testing**: Use Lighthouse and custom scripts for load testing map and API
+- **Security Testing**: Automated tests for JWT, input sanitization, rate limiting, and abuse prevention
+- **Manual Review**: Onboarding, leveling, sharing flows, and accessibility (a11y)
+- **Compliance Testing**: Privacy and data handling checks
 
 ## 7. Rationale & Context
 
@@ -147,32 +153,39 @@ data_source ENUM('user','scraped','seeded')
 - PWA ensures accessibility and installability without app stores.
 - Security, privacy, and moderation are prioritized to protect users and content.
 - Accessibility and inclusivity are core to the user experience.
+- Cloud-native architecture and Azure Well-Architected Framework pillars guide all design and implementation decisions.
 
 ## 8. Dependencies & External Integrations
 
 ### External Systems
+
 - **EXT-001**: Google Maps Platform – Map rendering and geolocation
 - **EXT-002**: AWS S3 – Image storage
 - **EXT-003**: Cloudinary – Image optimization and CDN
 - **EXT-004**: Firebase Cloud Messaging – Push notifications
 
 ### Third-Party Services
+
 - **SVC-001**: Google Analytics 4 – Analytics and usage tracking
 - **SVC-002**: Sentry – Error tracking
 
 ### Infrastructure Dependencies
+
 - **INF-001**: PostgreSQL with PostGIS – Geospatial data storage
 - **INF-002**: Redis – Caching for performance
 - **INF-003**: Load balancer – Horizontal scaling
 
 ### Data Dependencies
+
 - **DAT-001**: NZ supermarket websites – Snack data scraping
 
 ### Technology Platform Dependencies
+
 - **PLT-001**: Node.js 18+ (for frontend tooling), React 18+, Tailwind CSS, Vite
 - **PLT-002**: .NET 8+, Entity Framework Core, SQL/NoSQL database
 
 ### Compliance Dependencies
+
 - **COM-001**: GDPR/Privacy Act compliance for user data
 
 ## 9. Examples & Edge Cases
@@ -187,13 +200,18 @@ data_source ENUM('user','scraped','seeded')
   "location": { "lat": -36.8485, "lng": 174.7633 },
   "imageUrl": "https://cdn.cloudinary.com/snackspot/vegan-croissant.jpg"
 }
-
-// Edge Case: User attempts to upload a 20MB image (should be rejected)
-// Edge Case: User tries to create a new category at Level 1 (should be denied)
-// Edge Case: Invalid JWT provided (should return 401 Unauthorized)
-// Edge Case: Malformed request body (should return 400 Bad Request)
-// Edge Case: User attempts to access another user's private data (should return 403 Forbidden)
 ```
+
+**Edge Cases:**
+
+- User attempts to upload a 20MB image (should be rejected)
+- User tries to create a new category at Level 1 (should be denied)
+- Invalid JWT provided (should return 401 Unauthorized)
+- Malformed request body (should return 400 Bad Request)
+- User attempts to access another user's private data (should return 403 Forbidden)
+- Cloud service misconfiguration (e.g., S3/Cloudinary, database, monitoring)
+- Cost overruns due to unoptimized cloud resource usage
+- Data privacy or compliance gaps
 
 ## 10. Validation Criteria
 

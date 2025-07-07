@@ -17,63 +17,103 @@ This implementation plan provides a step-by-step, machine-readable roadmap for b
 - **REQ-002**: Implement responsive, accessible UI (WCAG 2.1 AA, Lighthouse ≥ 90).
 - **REQ-003**: Support CRUD for core entities (users, snacks, reviews, categories).
 - **REQ-004**: Use Git with meaningful commit history and pre-commit hooks.
-- **REQ-005**: Deploy both frontend and backend to public endpoints with monitoring and rollback.
-- **SEC-001**: JWT authentication with secure refresh, input validation, rate limiting, GDPR/NZ Privacy Act compliance.
+- **REQ-005**: Deploy both frontend and backend to public endpoints with monitoring, health checks, and documented rollback.
+- **SEC-001**: JWT authentication with secure refresh, input validation, rate limiting, GDPR/NZ Privacy Act compliance, and secure storage of refresh tokens (httpOnly cookies).
+- **SEC-002**: Uploaded images must be virus-scanned and stored securely.
+- **SEC-003**: All endpoints must enforce input validation and sanitization, with business logic enforced on backend.
+- **SEC-004**: API endpoints for scraping and public endpoints must be rate-limited and implement abuse prevention.
+- **SEC-005**: All user data handling must comply with GDPR and NZ Privacy Act.
+- **SEC-006**: Enforce HTTPS and strict CORS policy for all endpoints.
+- **SEC-007**: Implement logging best practices (PII redaction, secure log storage).
+- **SEC-008**: Automated dependency vulnerability scanning in CI (Dependabot, dotnet audit, npm audit).
 - **CON-001**: All public API endpoints must be versioned (e.g., /api/v1/).
-- **GUD-001**: Use Azure Well-Architected Framework pillars.
+- **CON-002**: Only users Level 2+ can create new categories; user following is available at Level 3+.
+- **GUD-001**: Use Azure Well-Architected Framework pillars (Security, Operational Excellence, Performance Efficiency, Reliability, Cost Optimization).
+- **GUD-002**: Use consistent naming conventions and resource abbreviations; all resources must be tagged for cost/governance.
+- **GUD-003**: Provide onboarding and clear user flows for first-time users.
 - **PAT-001**: Use Instagram-style sharing cards for social features.
+- **OPS-001**: Use Infrastructure as Code (Bicep, AVM modules) for all Azure resources.
+- **OPS-002**: Implement blue/green or canary deployment strategy.
+- **OPS-003**: Set up automated database backups and restore validation.
+- **OPS-004**: Plan and implement high availability and disaster recovery.
+- **OPS-005**: Use secret management (Azure Key Vault, environment variables) for all sensitive config.
+- **OPS-006**: Implement environment-specific configuration and secret management.
 
 ## 2. Implementation Steps
 
 ### Implementation Phase 1
+
 - GOAL-001: Establish project structure, version control, and CI/CD pipelines.
 
-| Task | Description | Completed | Date |
-|------|-------------|-----------|------|
-| TASK-001 | Initialize Git repository with .gitignore, README.md, and commit conventions. |  |  |
-| TASK-002 | Set up monorepo or separate repos for frontend and backend in /src/frontend and /src/backend. |  |  |
-| TASK-003 | Configure GitHub Actions for CI/CD for both frontend and backend. |  |  |
-| TASK-004 | Add pre-commit hooks for linting and commit message checks. |  |  |
+| Task     | Description                                                                                   | Completed | Date |
+| -------- | --------------------------------------------------------------------------------------------- | --------- | ---- |
+| TASK-001 | Initialize Git repository with .gitignore, README.md, and commit conventions.                 |           |      |
+| TASK-002 | Set up monorepo or separate repos for frontend and backend in /src/frontend and /src/backend. |           |      |
+| TASK-003 | Configure GitHub Actions for CI/CD for both frontend and backend.                             |           |      |
+| TASK-004 | Add pre-commit hooks for linting and commit message checks.                                   |           |      |
+| TASK-005 | Add automated dependency vulnerability scanning (Dependabot, dotnet audit, npm audit) in CI.  |           |      |
 
 ### Implementation Phase 2
-- GOAL-002: Scaffold and implement backend API with C# .NET 8+, EF Core, and SQL database.
 
-| Task | Description | Completed | Date |
-|------|-------------|-----------|------|
-| TASK-005 | Scaffold .NET 8+ Web API project in /src/backend. |  |  |
-| TASK-006 | Set up EF Core, configure SQL database, and implement migrations. |  |  |
-| TASK-007 | Define and implement core entities: User, Snack, Review, Category. |  |  |
-| TASK-008 | Implement versioned API endpoints (/api/v1/...) for CRUD operations. |  |  |
-| TASK-009 | Implement JWT authentication with refresh token logic and secure storage. |  |  |
-| TASK-010 | Add input validation, rate limiting, and error handling middleware. |  |  |
-| TASK-011 | Write unit and integration tests for API endpoints and business logic. |  |  |
-| TASK-012 | Set up monitoring, health checks, and deployment pipeline for backend. |  |  |
+- GOAL-002: Scaffold and implement backend API with C# .NET 8+, EF Core, and SQL database (PostgreSQL with PostGIS recommended for geospatial data).
+
+| Task     | Description                                                                                  | Completed | Date |
+| -------- | -------------------------------------------------------------------------------------------- | --------- | ---- |
+| TASK-006 | Scaffold .NET 8+ Web API project in /src/backend.                                            |           |      |
+| TASK-007 | Set up EF Core, configure SQL database (PostgreSQL with PostGIS), and implement migrations.  |           |      |
+| TASK-008 | Define and implement core entities: User, Snack, Review, Category.                           |           |      |
+| TASK-009 | Implement versioned API endpoints (/api/v1/...) for CRUD operations.                         |           |      |
+| TASK-010 | Implement JWT authentication with refresh token logic and secure storage (httpOnly cookies). |           |      |
+| TASK-011 | Add input validation, rate limiting, and error handling middleware.                          |           |      |
+| TASK-012 | Write unit and integration tests for API endpoints and business logic.                       |           |      |
+| TASK-013 | Set up monitoring, health checks, logging, and deployment pipeline for backend.              |           |      |
+| TASK-014 | Implement image upload with virus scanning and secure storage (e.g., S3/Cloudinary).         |           |      |
+| TASK-015 | Implement abuse prevention and moderation endpoints.                                         |           |      |
+| TASK-016 | Implement EF Core spatial queries for geospatial features (PostGIS).                         |           |      |
+| TASK-017 | Decide and document map clustering approach (client/server).                                 |           |      |
+| TASK-018 | Enforce HTTPS and strict CORS policy in backend.                                             |           |      |
+| TASK-019 | Implement logging best practices (PII redaction, secure log storage).                        |           |      |
+| TASK-020 | Set up secret management using Azure Key Vault and environment variables.                    |           |      |
+| TASK-021 | Document and test rollback procedures for app and database.                                  |           |      |
+| TASK-022 | Set up automated database backups and restore validation.                                    |           |      |
+| TASK-023 | Plan and implement high availability and disaster recovery.                                  |           |      |
+| TASK-024 | Add API contract/schema validation in CI (OpenAPI).                                          |           |      |
+| TASK-025 | Implement test data anonymization for compliance.                                            |           |      |
+| TASK-026 | Use Bicep and AVM modules for all Azure resources (infra as code).                           |           |      |
+| TASK-027 | Plan and implement blue/green or canary deployment strategy.                                 |           |      |
+| TASK-028 | Implement environment-specific configuration and secret management.                          |           |      |
 
 ### Implementation Phase 3
+
 - GOAL-003: Scaffold and implement frontend with React, TypeScript, and accessibility best practices.
 
-| Task | Description | Completed | Date |
-|------|-------------|-----------|------|
-| TASK-013 | Scaffold React + TypeScript project in /src/frontend. |  |  |
-| TASK-014 | Set up Tailwind CSS (or chosen styling library) and configure breakpoints. |  |  |
-| TASK-015 | Implement routing with React Router. |  |  |
-| TASK-016 | Build core UI components: map view, snack cards, forms, navigation. |  |  |
-| TASK-017 | Ensure all UI meets WCAG 2.1 AA and Lighthouse ≥ 90. |  |  |
-| TASK-018 | Integrate frontend with backend API endpoints. |  |  |
-| TASK-019 | Implement authentication flows and secure token storage. |  |  |
-| TASK-020 | Write unit, integration, and E2E tests for UI and flows. |  |  |
-| TASK-021 | Set up monitoring, health checks, and deployment pipeline for frontend. |  |  |
+| Task     | Description                                                                      | Completed | Date |
+| -------- | -------------------------------------------------------------------------------- | --------- | ---- |
+| TASK-029 | Scaffold React + TypeScript project in /src/frontend.                            |           |      |
+| TASK-030 | Set up Tailwind CSS (or chosen styling library) and configure breakpoints.       |           |      |
+| TASK-031 | Implement routing with React Router.                                             |           |      |
+| TASK-032 | Build core UI components: map view, snack cards, forms, navigation.              |           |      |
+| TASK-033 | Ensure all UI meets WCAG 2.1 AA and Lighthouse ≥ 90.                             |           |      |
+| TASK-034 | Integrate frontend with backend API endpoints.                                   |           |      |
+| TASK-035 | Implement authentication flows and secure token storage.                         |           |      |
+| TASK-036 | Write unit, integration, and E2E tests for UI and flows.                         |           |      |
+| TASK-037 | Set up monitoring, health checks, logging, and deployment pipeline for frontend. |           |      |
+| TASK-038 | Implement accessibility enhancements and conduct a11y audit.                     |           |      |
+| TASK-039 | Integrate map with clustering and geospatial search.                             |           |      |
+| TASK-040 | Generate and publish API documentation (Swagger/OpenAPI).                        |           |      |
+| TASK-041 | Create architecture diagrams and developer onboarding scripts.                   |           |      |
 
 ### Implementation Phase 4
+
 - GOAL-004: Implement advanced features, gamification, and social sharing.
 
-| Task | Description | Completed | Date |
-|------|-------------|-----------|------|
-| TASK-022 | Implement leveling, badges, and area unlocking logic. |  |  |
-| TASK-023 | Add Instagram-style sharing card generation. |  |  |
-| TASK-024 | Implement user-generated content moderation and reporting. |  |  |
-| TASK-025 | Add accessibility enhancements and conduct a11y audit. |  |  |
-| TASK-026 | Finalize documentation and onboarding flows. |  |  |
+| Task     | Description                                                | Completed | Date |
+| -------- | ---------------------------------------------------------- | --------- | ---- |
+| TASK-042 | Implement leveling, badges, and area unlocking logic.      |           |      |
+| TASK-043 | Add Instagram-style sharing card generation.               |           |      |
+| TASK-044 | Implement user-generated content moderation and reporting. |           |      |
+| TASK-045 | Finalize documentation and onboarding flows.               |           |      |
+| TASK-046 | Track technical debt and remediation via GitHub Issues.    |           |      |
 
 ## 3. Alternatives
 
@@ -103,12 +143,23 @@ This implementation plan provides a step-by-step, machine-readable roadmap for b
 - **TEST-004**: End-to-end tests for user journeys (Cypress or Playwright)
 - **TEST-005**: Accessibility (a11y) tests (axe, Lighthouse)
 - **TEST-006**: Performance/load tests for map and API endpoints
+- **TEST-007**: Security tests for JWT, input sanitization, rate limiting, and abuse prevention
+- **TEST-008**: Manual review for onboarding, leveling, sharing flows, and accessibility
+- **TEST-009**: Compliance checks for privacy and data handling
 
 ## 7. Risks & Assumptions
 
-- **RISK-001**: Integration issues between frontend and backend APIs
-- **RISK-002**: Accessibility or performance targets not met on first attempt
+| Risk ID  | Description                                                       | Mitigation Strategy                                                                      |
+| -------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| RISK-001 | Integration issues between frontend and backend APIs              | Early contract-first API design, OpenAPI validation, regular integration tests           |
+| RISK-002 | Accessibility or performance targets not met on first attempt     | Early a11y/performance audits, iterative improvement, Lighthouse/axe in CI               |
+| RISK-003 | Security vulnerabilities in authentication, file upload, or abuse | Security reviews, automated security tests, dependency scanning, regular pen-testing     |
+| RISK-004 | Cloud service misconfiguration (S3/Cloudinary, DB, monitoring)    | Infrastructure as Code, automated validation, environment parity, regular config reviews |
+| RISK-005 | Cost overruns due to unoptimized cloud resource usage             | Tagging, cost monitoring, auto-scaling, regular cost reviews                             |
+| RISK-006 | Data privacy or compliance gaps                                   | Privacy reviews, compliance automation, test data anonymization, regular audits          |
+
 - **ASSUMPTION-001**: All team members are familiar with React, .NET, and CI/CD pipelines
+- **ASSUMPTION-002**: All required APIs and libraries are available and compatible
 
 ## 8. Related Specifications / Further Reading
 
